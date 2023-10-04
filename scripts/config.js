@@ -1,16 +1,18 @@
-const path = require('path');
-const fs = require('fs');
-const { rollup } = require('rollup');
-const filesize = require('filesize');
-const uglify = require('uglify-js');
-const chalk = require('chalk');
-const gzipSize = require('gzip-size');
-const flow = require('rollup-plugin-flow');
-const buble = require('rollup-plugin-buble');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const replace = require('rollup-plugin-replace');
-const version = process.env.VERSION || require('../package.json').version;
+import path from 'path';
+import fs from 'fs';
+import {rollup} from 'rollup';
+import {filesize} from 'filesize';
+import chalk from 'chalk';
+import {gzipSizeSync} from 'gzip-size';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
+import flow from 'rollup-plugin-flow';
+import pkgJson from '../package.json' assert { type: "json" };
+import { fileURLToPath } from 'url';
+const __dirname = fileURLToPath(import.meta.url);
+
+const version = process.env.VERSION || pkgJson.version;
 
 const commons = {
   banner:
@@ -19,11 +21,7 @@ const commons = {
   * (c) ${new Date().getFullYear()} Abdelrahman Awad
   * @license MIT
   */`,
-  outputFolder: path.join(__dirname, '..', 'dist'),
-  uglifyOptions: {
-    compress: true,
-    mangle: true,
-  }
+  outputFolder: path.join(__dirname, '..', '..', 'dist')
 };
 
 const paths = {
@@ -33,7 +31,7 @@ const paths = {
 const utils = {
   stats ({ path, code }) {
     const { size } = fs.statSync(path);
-    const gzipped = gzipSize.sync(code);
+    const gzipped = gzipSizeSync(code);
 
     return `| Size: ${filesize(size)} | Gzip: ${filesize(gzipped)}`;
   },
@@ -45,14 +43,6 @@ const utils = {
     fs.writeFileSync(outputPath, code);
     let stats = this.stats({ code, path: outputPath });
     console.log(`${chalk.green('Output File:')} ${fileName} ${stats}`);
-
-    if (minify) {
-      let minifiedFileName = fileName.replace('.js', '') + '.min.js';
-      outputPath = path.join(paths.dist, minifiedFileName);
-      fs.writeFileSync(outputPath, uglify.minify(code, commons.uglifyOptions).code);
-      stats = this.stats({ code, path: outputPath });
-      console.log(`${chalk.green('Output File:')} ${minifiedFileName} ${stats}`);
-    }
 
     return true;
   }
@@ -107,8 +97,7 @@ function genConfig (options) {
         resolve(),
         commonjs({
           include: 'node_modules/validator/**',
-        }),
-        buble()
+        })
       ]
     },
     output: {
@@ -133,9 +122,8 @@ const configs = Object.keys(builds).reduce((prev, key) => {
   return prev;
 }, {});
 
-module.exports = {
+export default {
   configs,
   utils,
-  uglifyOptions: commons.uglifyOptions,
   paths
 };

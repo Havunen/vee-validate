@@ -1,12 +1,11 @@
-const chalk = require('chalk');
-const mkdirpNode = require('mkdirp');
-const { promisify } = require('util');
-const { configs, utils, paths } = require('./config');
+import chalk from 'chalk';
+import {mkdirpNative} from 'mkdirp';
 
-const mkdirp = promisify(mkdirpNode);
+import config from './config.js';
+const {configs, paths, utils} = config
 
 async function build () {
-  await mkdirp(paths.dist);
+  await mkdirpNative(paths.dist);
   console.log(chalk.cyan('Generating main builds...'));
   await utils.writeBundle(configs.umdDev, 'vee-validate.js', true);
 

@@ -1,3 +1,7 @@
+## FORK OF VEE-VALIDATE v2
+
+This fork differs to original by exporting vee-validate library as ecmascript module
+
 <p align="center">
   <a href="https://logaretm.github.io/vee-validate/" target="_blank">
     <img width="200" src="https://github.com/logaretm/vee-validate/blob/master/logo.png">

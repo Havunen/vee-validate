@@ -1,22 +1,22 @@
-const { rollup } = require('rollup');
-const buble = require('rollup-plugin-buble');
-const uglify = require('uglify-js');
-const fs = require('fs');
-const path = require('path');
-const mkdirpNode = require('mkdirp');
-const { promisify } = require('util');
-const chalk = require('chalk');
-const resolve = require('rollup-plugin-node-resolve');
-const { paths, uglifyOptions } = require('./config');
+import {rollup} from 'rollup';
+import fs from 'fs';
+import path from 'path';
+import {mkdirpNative} from 'mkdirp';
 
-const localesDir = path.join(__dirname, '..', 'locale');
+import chalk from 'chalk';
+import resolve from '@rollup/plugin-node-resolve';
+import config from './config.js';
+import { fileURLToPath } from 'url';
+const __dirname = fileURLToPath(import.meta.url);
+
+const { paths} = config
+
+const localesDir = path.join(__dirname, '..', '..', 'locale');
 const files = fs.readdirSync(localesDir);
 let cache;
 
-const mkdirp = promisify(mkdirpNode);
-
 async function build () {
-  await mkdirp(path.join(paths.dist, 'locale'));
+  await mkdirpNative(path.join(paths.dist, 'locale'));
   console.log(chalk.cyan('Building locales...'));
 
   for (let i = 0; i < files.length; i++) {
@@ -26,21 +26,21 @@ async function build () {
     // ignore utils file.
     if (/utils/.test(file)) continue;
 
-    const input = path.join(__dirname, '..', 'locale', file);
+    const input = path.join(__dirname, '..', '..', 'locale', file);
     const outputPath = path.join(paths.dist, 'locale', file);
 
     const bundle = await rollup({
       cache,
       input,
       external: ['VeeValidate'],
-      plugins: [buble(), resolve()],
+      plugins: [resolve()],
     });
     const { output } = await bundle.generate({
-      format: 'umd',
+      format: 'esm',
       name: `__vee_validate_locale__${file}`,
     });
 
-    fs.writeFileSync(outputPath, uglify.minify(output[0].code, uglifyOptions).code);
+    fs.writeFileSync(outputPath, output[0].code);
     process.stdout.clearLine();
     process.stdout.cursorTo(0);
   }
