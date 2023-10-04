@@ -1,11 +1,14 @@
 {
   "name": "@havunen/vee-validate",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Template Based Validation Framework for Vue.js",
   "author": "Abdelrahman Awad <logaretm1@gmail.com>",
   "license": "MIT",
   "type": "module",
-  "exports": "./dist/vee-validate.esm.mjs",
+  "exports": {
+    ".": "./dist/vee-validate.esm.mjs",
+    "./dist/*": "./dist/*"
+  },
   "typings": "types/index.d.ts",
   "homepage": "https://logaretm.github.io/vee-validate/",
   "repository": "https://github.com/logaretm/vee-validate",
