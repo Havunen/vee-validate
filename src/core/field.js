@@ -189,8 +189,7 @@ export default class Field {
       return this.id === options.id;
     }
 
-    let matchesComponentId = isNullOrUndefined(options.vmId) ? () => true : (id) => id === this.vmId;
-    if (!matchesComponentId(options.vmId)) {
+    if (!isNullOrUndefined(options.vmId) && options.vmId !== this.vmId) {
       return false;
     }
 

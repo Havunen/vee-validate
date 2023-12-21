@@ -7,9 +7,9 @@ const {configs, paths, utils} = config
 async function build () {
   await mkdirpNative(paths.dist);
   console.log(chalk.cyan('Generating main builds...'));
-  await utils.writeBundle(configs.umdDev, 'vee-validate.js', true);
+  await utils.writeBundle(configs.umdDev, 'vee-validate.cjs', true);
 
-  await utils.writeBundle(configs.umdMinimalProd, 'vee-validate.minimal.js', true);
+  await utils.writeBundle(configs.umdMinimalProd, 'vee-validate.minimal.cjs', true);
 }
 
 build();

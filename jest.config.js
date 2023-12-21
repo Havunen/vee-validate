@@ -1,4 +1,8 @@
 module.exports = {
+  testEnvironment: 'jsdom',
+  testEnvironmentOptions: {
+    customExportConditions: ['node'],
+  },
   // setupTestFrameworkScriptFile: '<rootDir>/tests/setup.js',
   testMatch: [
     '**/tests/**/*.js'
