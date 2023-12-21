@@ -1,6 +1,6 @@
 {
   "name": "@havunen/vee-validate",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Template Based Validation Framework for Vue.js",
   "author": "Abdelrahman Awad <logaretm1@gmail.com>",
   "license": "MIT",
@@ -37,6 +37,7 @@
   ],
   "files": [
     "dist/*.js",
+    "dist/*.cjs",
     "dist/*.mjs",
     "dist/locale/*.js",
     "types/*.d.ts"
